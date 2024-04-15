@@ -30,6 +30,12 @@ class Issue(models.Model):
 
     )
     TAG_CHOICES= (
+        ('BUG', 'bug'),
+        ('FEATURE', 'feature'),
+        ('TASK', 'task'),
+
+    )
+    STATUS_CHOICES= (
         ('To Do', 'to do'),
         ('In Progress', 'in progress'),
         ('Finished', 'finished'),
@@ -41,9 +47,11 @@ class Issue(models.Model):
         max_length=128, verbose_name="title", null=False, blank=False
     )
     description = models.TextField(blank=True, verbose_name="description", null=False)
-    priority = models.CharField(max_length=15, choices=PRIORITY_CHOICES, default="")
-    tag = models.CharField(max_length=15, choices=TAG_CHOICES, default="")
+    priority = models.CharField(max_length=15, choices=PRIORITY_CHOICES, default="low")
+    tag = models.CharField(max_length=15, choices=TAG_CHOICES, default="To Do")
+    status = models.CharField(max_length=15, choices=STATUS_CHOICES, default="task")
     author = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    contributors = models.ManyToManyField(settings.AUTH_USER_MODEL, through='authentication.Contributor', related_name="contributors")
     time_created = models.DateTimeField(auto_now_add=True)
 
 class Comment(models.Model):

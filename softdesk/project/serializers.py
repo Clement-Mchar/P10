@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
-from authentication.models import Contributor
+from authentication.models import Contributor, User
  
 from .models import Project, Issue, Comment
 
@@ -24,8 +24,9 @@ class ProjectSerializer(ModelSerializer):
                 user=self.context['request'].user,
                 project=project
             )
-            contributor.save()
             project.save()
+            contributor.save()
+            
             return project
         else:
             return None
@@ -45,12 +46,23 @@ class ProjectSerializer(ModelSerializer):
             return kwargs.pop('issues', None)
 
 class IssueSerializer(ModelSerializer):
+    contributors = serializers.SerializerMethodField()
     class Meta:
         model = Issue
-        fields = ['id', "title", "description", "priority", "tag", "time_created"]
-
+        fields = ['id', "title", "description", "priority", "tag", 'status', "contributors", "time_created"]
+    def get_contributors(self, obj):
+        contributors = obj.contributors.all()
+        return [contributor.username for contributor in contributors]
+    
     def create(self, validated_data):
-        issue = Issue.objects.create(**validated_data)
+        project_id = self.context['view'].kwargs.get('project_pk')
+        project = Project.objects.get(id=project_id)
+        issue = Issue.objects.create(author=self.context['request'].user, project=project, **validated_data)
+        contributor = Contributor.objects.get(user=issue.author, project=project)
+        contributor.issue=issue
+        issue.save()
+        contributor.save()
+
         return issue
 
 class CommentSerializer(ModelSerializer):

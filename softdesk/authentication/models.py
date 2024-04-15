@@ -39,6 +39,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class Contributor(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    project = models.ForeignKey(to="project.Project", on_delete=models.CASCADE, default=None)   
+    user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE,default=None)
+    project = models.ForeignKey(to="project.Project", on_delete=models.CASCADE, default=None)
+    issue = models.ForeignKey(to="project.Issue", on_delete=models.CASCADE, null=True, default=None)
     time_created = models.DateTimeField(auto_now=True)

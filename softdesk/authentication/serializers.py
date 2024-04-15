@@ -26,7 +26,7 @@ class UserSerializer(ModelSerializer):
         return user
  
 class ContributorSerializer(ModelSerializer):
- 
+
     class Meta:
         model = Contributor
-        fields = ['id', 'user', "project"]
+        fields = ['id', 'user', "project", "issue"]
