@@ -7,14 +7,10 @@ from .models import Project, Issue, Comment
 class ProjectSerializer(ModelSerializer):
     author= serializers.SerializerMethodField()
     contributors = serializers.SerializerMethodField()
-    project_url = serializers.HyperlinkedIdentityField(
-        view_name='projects-detail',
-        read_only=True,
-    )
     issues = serializers.SerializerMethodField()
     class Meta:
         model = Project
-        fields = ['id', 'project_url', 'name', "description", "contributors", "type", "author", "time_created"]
+        fields = ['id', 'name', "description", "contributors", "type", "author", "time_created", "issues", ]
 
     def create(self, validated_data):
         if self.context['request'].user.is_authenticated:
@@ -33,8 +29,7 @@ class ProjectSerializer(ModelSerializer):
             return project
         else:
             return None
-
-
+    
     def get_author(self, obj):
         return obj.author.username
 
@@ -42,18 +37,21 @@ class ProjectSerializer(ModelSerializer):
         contributors = obj.contributors.all()
         return [contributor.username for contributor in contributors]
     
-    def get_issues(self, obj):
+    def get_issues(self, obj, *args, **kwargs):
         user = self.context['request'].user
-        if user.is_authenticated and user in obj.contributors.all():
+        if user in obj.contributors.all():
             return [issue.title for issue in obj.issue_set.all()]
         else:
-            return []
+            return kwargs.pop('issues', None)
 
 class IssueSerializer(ModelSerializer):
- 
     class Meta:
         model = Issue
-        fields = ['id', "project", "title", "description", "author", "time_created"]
+        fields = ['id', "title", "description", "priority", "tag", "time_created"]
+
+    def create(self, validated_data):
+        issue = Issue.objects.create(**validated_data)
+        return issue
 
 class CommentSerializer(ModelSerializer):
  

@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 # Create your views here.
 from rest_framework import viewsets, status
@@ -13,13 +15,7 @@ from rest_framework.response import Response
 class UserViewset(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     permission_classes=[IsCreationOrIsAdmin]
+
     def get_queryset(self):
         return User.objects.all()
-    
-    def list(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            return super().list(request, *args, **kwargs)
-        else:
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
-
 
