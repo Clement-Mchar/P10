@@ -12,10 +12,10 @@ from .permissions import IsCreationOrIsAdmin
 from .managers import UserManager
 from rest_framework.response import Response
 
+
 class UserViewset(viewsets.ModelViewSet):
     serializer_class = UserSerializer
-    permission_classes=[IsCreationOrIsAdmin]
+    permission_classes = [IsCreationOrIsAdmin]
 
     def get_queryset(self):
         return User.objects.all()
-

@@ -2,13 +2,14 @@ from django.db import models
 import uuid
 from django.conf import settings
 
+
 # Create your models here.
 class Project(models.Model):
     TYPE_CHOICES = (
-        ('front-end', "front-end"),
-        ('Back-end', "back-end"),
-        ('iOs', "iOs"),
-        ('android', "android"),
+        ("front-end", "front-end"),
+        ("Back-end", "back-end"),
+        ("iOs", "iOs"),
+        ("android", "android"),
     )
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(
@@ -17,29 +18,31 @@ class Project(models.Model):
     description = models.TextField(
         max_length=2048, blank=True, verbose_name="description", null=False
     )
-    contributors = models.ManyToManyField(settings.AUTH_USER_MODEL, through="authentication.Contributor")
+    contributors = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, through="authentication.Contributor"
+    )
     type = models.CharField(max_length=15, choices=TYPE_CHOICES, default="")
-    author = models.ForeignKey(to=settings.AUTH_USER_MODEL, related_name="author", on_delete=models.CASCADE)
+    author = models.ForeignKey(
+        to=settings.AUTH_USER_MODEL, related_name="author", on_delete=models.CASCADE
+    )
     time_created = models.DateTimeField(auto_now_add=True)
 
+
 class Issue(models.Model):
-    PRIORITY_CHOICES= (
-        ('LOW', 'low'),
-        ('MEDIUM', 'medium'),
-        ('HIGH', 'high'),
-
+    PRIORITY_CHOICES = (
+        ("LOW", "low"),
+        ("MEDIUM", "medium"),
+        ("HIGH", "high"),
     )
-    TAG_CHOICES= (
-        ('BUG', 'bug'),
-        ('FEATURE', 'feature'),
-        ('TASK', 'task'),
-
+    TAG_CHOICES = (
+        ("BUG", "bug"),
+        ("FEATURE", "feature"),
+        ("TASK", "task"),
     )
-    STATUS_CHOICES= (
-        ('To Do', 'to do'),
-        ('In Progress', 'in progress'),
-        ('Finished', 'finished'),
-
+    STATUS_CHOICES = (
+        ("To Do", "to do"),
+        ("In Progress", "in progress"),
+        ("Finished", "finished"),
     )
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     project = models.ForeignKey(to=Project, on_delete=models.CASCADE)
@@ -51,8 +54,13 @@ class Issue(models.Model):
     tag = models.CharField(max_length=15, choices=TAG_CHOICES, default="To Do")
     status = models.CharField(max_length=15, choices=STATUS_CHOICES, default="task")
     author = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    contributors = models.ManyToManyField(settings.AUTH_USER_MODEL, through='authentication.Contributor', related_name="contributors")
+    contributors = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        through="authentication.Contributor",
+        related_name="contributors",
+    )
     time_created = models.DateTimeField(auto_now_add=True)
+
 
 class Comment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
