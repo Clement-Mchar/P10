@@ -49,9 +49,10 @@ class IssueViewset(viewsets.ModelViewSet):
         except ObjectDoesNotExist:
             return Response({"message": "User does not exist."}, status=status.HTTP_404_NOT_FOUND)
         serializer = self.get_serializer(issue)
-        contributor= Contributor.objects.get(user=user, project=project)
-        if contributor.project != project:
-            return Response({"message": "User is not a contributor to this project."}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            contributor= Contributor.objects.get(user=user, project=project)
+        except ObjectDoesNotExist:
+            return Response({"message": "User is not a contributor to this project."}, status=status.HTTP_404_NOT_FOUND)
         if contributor.issue == issue:
             return Response({"message": "User is already a contributor to this issue."}, status=status.HTTP_400_BAD_REQUEST)
         else:
@@ -60,3 +61,9 @@ class IssueViewset(viewsets.ModelViewSet):
             issue.save()
             serializer = self.get_serializer(issue)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+class CommentViewset(viewsets.ModelViewSet):
+    serializer_class = CommentSerializer
+
+    def get_queryset(self):
+        return Comment.objects.filter(issue=self.kwargs['issue_pk'])
