@@ -1,6 +1,5 @@
 from rest_framework import permissions
 
-
 class IsCreationOrIsAdmin(permissions.BasePermission):
 
     def has_permission(self, request, view):
@@ -17,3 +16,5 @@ class IsCreationOrIsAdmin(permissions.BasePermission):
                 or request.user.is_staff
             )
         return True
+
+

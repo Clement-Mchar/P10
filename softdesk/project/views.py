@@ -2,7 +2,8 @@ from django.shortcuts import render
 
 # Create your views here.
 from rest_framework import viewsets, status
-from .permissions import IsAuthorOrReadOnly
+from .permissions import IsAuthorOrReadOnly, IsContributor
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from django.core.exceptions import ObjectDoesNotExist
@@ -18,7 +19,7 @@ class ProjectViewset(viewsets.ModelViewSet):
     def get_queryset(self):
         return Project.objects.all()
 
-    @action(detail=True, methods=["post"])
+    @action(detail=True, methods=["post"], permission_classes=[IsAuthenticated])
     def subscribe(self, request, pk=None):
         project = self.get_object()
         user = request.user
@@ -41,7 +42,7 @@ class ProjectViewset(viewsets.ModelViewSet):
 
 class IssueViewset(viewsets.ModelViewSet):
     serializer_class = IssueSerializer
-    permission_classes = [IsAuthorOrReadOnly]
+    permission_classes = [IsAuthorOrReadOnly, IsContributor]
     def get_queryset(self):
         return Issue.objects.filter(project=self.kwargs["project_pk"])
 
@@ -78,7 +79,7 @@ class IssueViewset(viewsets.ModelViewSet):
 
 class CommentViewset(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
-    permission_classes = [IsAuthorOrReadOnly]
+    permission_classes = [IsAuthorOrReadOnly, IsContributor]
 
     def get_queryset(self):
         return Comment.objects.filter(issue=self.kwargs["issue_pk"])
