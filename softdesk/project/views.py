@@ -1,6 +1,3 @@
-from django.shortcuts import render
-
-# Create your views here.
 from rest_framework import viewsets, status
 from .permissions import IsAuthorOrReadOnly, IsContributor
 from rest_framework.permissions import IsAuthenticated
@@ -16,6 +13,7 @@ from .serializers import ProjectSerializer, IssueSerializer, CommentSerializer
 class ProjectViewset(viewsets.ModelViewSet):
     serializer_class = ProjectSerializer
     permission_classes = [IsAuthorOrReadOnly]
+
     def get_queryset(self):
         return Project.objects.all()
 
@@ -43,6 +41,7 @@ class ProjectViewset(viewsets.ModelViewSet):
 class IssueViewset(viewsets.ModelViewSet):
     serializer_class = IssueSerializer
     permission_classes = [IsAuthorOrReadOnly, IsContributor]
+
     def get_queryset(self):
         return Issue.objects.filter(project=self.kwargs["project_pk"])
 

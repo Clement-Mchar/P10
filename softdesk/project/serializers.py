@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
-from authentication.models import Contributor, User
+from authentication.models import Contributor
 from django.urls import reverse
 from .models import Project, Issue, Comment
 

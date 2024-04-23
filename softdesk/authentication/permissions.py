@@ -1,5 +1,6 @@
 from rest_framework import permissions
 
+
 class IsCreationOrIsAdmin(permissions.BasePermission):
 
     def has_permission(self, request, view):
@@ -9,7 +10,7 @@ class IsCreationOrIsAdmin(permissions.BasePermission):
                 or request.user.is_superuser
                 or request.user.is_staff
             )
-        elif view.action == "list":
+        elif view.action in ["list", "retrieve"]:
             return (
                 request.user.is_authenticated
                 or request.user.is_superuser
@@ -18,3 +19,7 @@ class IsCreationOrIsAdmin(permissions.BasePermission):
         return True
 
 
+class IsUser(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if obj.id == request.user.id:
+            return True
