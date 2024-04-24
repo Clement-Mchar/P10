@@ -15,13 +15,14 @@
 
 3. Placez-vous dans le dossier "SoftDesk".
 
-4. Exécutez la commande "pip install pipenv" pour installer pipenv.
+4. Exécutez la commande "pip install -r requirements.txt" pour installer les dépendances nécessaires au fonctionnement de l'API.
 
 5. Exécutez la commande "pipenv shell" pour créer et activer votre environnement virtuel.
 
-6. Placez-vous dans le dossier "SoftDesk" et exécutez la commande "pipenv install" pour installer les dépendances nécessaires au déroulement du script.
-
 ## Utilisation
 
-1. Dans le terminal de commandes, entrez la commande python manage.py runserver
-
+1. Lancez Postman pour utiliser les différents endpoints de l'API :
+   Vous pouvez, grâce à django extensions, afficher la liste des endpoints grâce à la commande python manage.py show_urls.
+   Tous les endpoints nécéssitent un token d'authentification JWT, excepté celui de création de compte et d'obtention/rafraîchissement dudit JWT.
+   
+2. Pour pouvoir utiliser l'API, entrez la commande python manage.py runserver dans le terminal de commandes afin d'activer le serveur local.
