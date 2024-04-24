@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "b70504c6a6d92652126c6b08dedf8aa1dee84d1c9039128b90cbe4798be63c7d"
+            "sha256": "ae239057a69294cb146559e5a52c50adfe8ff9195417ed8a869740d282018f23"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -28,7 +28,7 @@
         "black": {
             "git": "git+https://github.com/psf/black",
             "markers": "python_version >= '3.8'",
-            "ref": "836acad86371578527408a4c8f968cde1302e130"
+            "ref": null
         },
         "blinker": {
             "hashes": [
@@ -184,6 +184,15 @@
             "index": "pypi",
             "markers": "python_full_version >= '3.8.0' and python_full_version < '4.0.0'",
             "version": "==1.34.1"
+        },
+        "drf-nested-routers": {
+            "hashes": [
+                "sha256:1407565abc7bada37c162c7e11bf214ae71625a17fdec6d9a47a17f4a3627d32",
+                "sha256:9a6813554020134a02e62f8c2934b2047717f7da06f8b801752c521e43735c63"
+            ],
+            "index": "pypi",
+            "markers": "python_version >= '3.8'",
+            "version": "==0.93.5"
         },
         "editorconfig": {
             "hashes": [
