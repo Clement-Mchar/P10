@@ -12,7 +12,7 @@ from .serializers import ProjectSerializer, IssueSerializer, CommentSerializer
 
 class ProjectViewset(viewsets.ModelViewSet):
     serializer_class = ProjectSerializer
-    permission_classes = [IsAuthorOrReadOnly]
+    permission_classes = [IsAuthorOrReadOnly, IsAuthenticated]
 
     def get_queryset(self):
         return Project.objects.all()
@@ -40,7 +40,7 @@ class ProjectViewset(viewsets.ModelViewSet):
 
 class IssueViewset(viewsets.ModelViewSet):
     serializer_class = IssueSerializer
-    permission_classes = [IsAuthorOrReadOnly, IsContributor]
+    permission_classes = [IsAuthorOrReadOnly, IsContributor, IsAuthenticated]
 
     def get_queryset(self):
         return Issue.objects.filter(project=self.kwargs["project_pk"])
@@ -78,7 +78,7 @@ class IssueViewset(viewsets.ModelViewSet):
 
 class CommentViewset(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
-    permission_classes = [IsAuthorOrReadOnly, IsContributor]
+    permission_classes = [IsAuthorOrReadOnly, IsContributor, IsAuthenticated]
 
     def get_queryset(self):
         return Comment.objects.filter(issue=self.kwargs["issue_pk"])
